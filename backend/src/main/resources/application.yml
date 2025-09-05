@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: act
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+
+# 공통 코인 설정 (모든 프로필에서 사용)
+trading:
+  coins:
+    LDK:
+      price-scale: 5
+      price-step: 0.00001
+      quantity-scale: 2
+      quantity-step: 0.01
+      min-order-value: 1.0
+      max-order-value: 100000.0
+    USDT:
+      price-scale: 4
+      price-step: 0.0001
+      quantity-scale: 2
+      quantity-step: 0.01
+      min-order-value: 1.0
+      max-order-value: 1000000.0
+

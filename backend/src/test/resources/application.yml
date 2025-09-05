@@ -1,0 +1,45 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        
+  sql:
+    init:
+      mode: never  # Disable schema.sql for tests
+      
+jwt:
+  secret: ThisIsAVeryLongSecretKeyForJWTTokenGenerationAndItShouldBeAtLeast256BitsLong
+  expiration: 86400000
+  
+auth:
+  lbank:
+    apikey: test-api-key
+    secret: test-api-secret
+    
+trading:
+  bot:
+    enabled: false
+    symbol: ldk_usdt
+  coins:
+    LDK:
+      price-scale: 5
+      price-step: 0.00001
+      quantity-scale: 2
+      quantity-step: 0.01
+      min-order-value: 1.0
+      max-order-value: 100000.0
+  
+lbank:
+  api:
+    base-url: https://api.lbkex.com
+    timeout: 30000
+    max-retry: 3

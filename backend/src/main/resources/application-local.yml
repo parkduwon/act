@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/act_db?useSSL=false&serverTimezone=Asia/Seoul&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&useUnicode=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: actuser
+    password: ActUser#2024!
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+        connection:
+          charSet: UTF-8
+          characterEncoding: utf8
+          useUnicode: true
+
+jwt:
+  secret: ThisIsAVeryLongSecretKeyForJWTTokenGenerationAndItShouldBeAtLeast256BitsLong
+  expiration: 86400000
+
+auth:
+  lbank:
+    apikey: 2e63924c-0bbe-4035-a918-24719040ed35
+    secret: 44EF395A8D7DC01A07F130AF4E5D8797
+
+# Trading Bot Configuration
+trading:
+  bot:
+    enabled: true
+    symbol: ldk_usdt
+
+# LBank API Configuration
+lbank:
+  api:
+    base-url: https://api.lbank.info
+    timeout: 30000
+    max-retry: 3
+  trading-rules:
+    enable-auto-fetch: true
+    cache-duration: 3600
+
+# Server Configuration
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-stacktrace: on-param

@@ -1,0 +1,70 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://prod-db-server:3306/act_db?useSSL=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useUnicode=true}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 25
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+        connection:
+          charSet: UTF-8
+          characterEncoding: utf8
+          useUnicode: true
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:3600000}
+
+auth:
+  lbank:
+    apikey: ${LBANK_API_KEY}
+    secret: ${LBANK_SECRET}
+
+# Trading Bot Configuration
+trading:
+  bot:
+    enabled: ${TRADING_BOT_ENABLED:false}
+    symbol: ${TRADING_SYMBOL:ldk_usdt}
+
+# LBank API Configuration
+lbank:
+  api:
+    base-url: ${LBANK_API_URL:https://api.lbank.info}
+    timeout: 30000
+    max-retry: 3
+  trading-rules:
+    enable-auto-fetch: false
+    cache-duration: 3600
+
+# Server Configuration
+server:
+  port: ${SERVER_PORT:8080}
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  error:
+    include-message: never
+    include-stacktrace: never
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
