@@ -37,6 +37,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/check").authenticated()
                 .anyRequest().authenticated()
             )
+            // IP 필터와 JWT 필터 적용
             .addFilterBefore(ipWhitelistFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         

@@ -1,15 +1,9 @@
 spring:
   datasource:
-    url: ${DB_URL:jdbc:mysql://prod-db-server:3306/act_db?useSSL=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useUnicode=true}
+    url: jdbc:mysql://172.17.0.1:3307/act_db?useSSL=false&serverTimezone=Asia/Seoul&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&useUnicode=true
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    hikari:
-      maximum-pool-size: 20
-      minimum-idle: 5
-      connection-timeout: 30000
-      idle-timeout: 600000
-      max-lifetime: 1800000
+    username: act_user
+    password: act_password_2024
   
   jpa:
     hibernate:
@@ -19,52 +13,47 @@ spring:
     properties:
       hibernate:
         format_sql: false
-        jdbc:
-          batch_size: 25
-          batch_versioned_data: true
-        order_inserts: true
-        order_updates: true
+        use_sql_comments: false
         connection:
           charSet: UTF-8
           characterEncoding: utf8
           useUnicode: true
 
 jwt:
-  secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION:3600000}
+  secret: ThisIsAVeryLongSecretKeyForJWTTokenGenerationAndItShouldBeAtLeast256BitsLong
+  expiration: 86400000
 
 auth:
   lbank:
-    apikey: ${LBANK_API_KEY}
-    secret: ${LBANK_SECRET}
+    apikey: 2e63924c-0bbe-4035-a918-24719040ed35
+    secret: 44EF395A8D7DC01A07F130AF4E5D8797
 
 # Trading Bot Configuration
 trading:
   bot:
-    enabled: ${TRADING_BOT_ENABLED:false}
-    symbol: ${TRADING_SYMBOL:ldk_usdt}
+    enabled: true
+    symbol: ldk_usdt
 
 # LBank API Configuration
 lbank:
   api:
-    base-url: ${LBANK_API_URL:https://api.lbank.info}
+    base-url: https://api.lbank.info
     timeout: 30000
     max-retry: 3
   trading-rules:
-    enable-auto-fetch: false
+    enable-auto-fetch: true
     cache-duration: 3600
 
 # Server Configuration
 server:
-  port: ${SERVER_PORT:8080}
-  compression:
-    enabled: true
-    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
-    min-response-size: 1024
+  port: 8090
   error:
-    include-message: never
-    include-stacktrace: never
-  tomcat:
-    threads:
-      max: 200
-      min-spare: 10
+    include-message: always
+    include-stacktrace: on-param
+
+logging:
+  level:
+    root: INFO
+    com.act.ldk: INFO
+    org.springframework.web: INFO
+    org.hibernate: WARN

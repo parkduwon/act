@@ -1,9 +1,4 @@
-import axios from 'axios';
-
-const axiosInstance = axios.create({
-  baseURL: '/api',
-  withCredentials: true,
-});
+import { api } from './client';
 
 export interface LoginRequest {
   username: string;
@@ -17,17 +12,17 @@ export interface LoginResponse {
 
 export const authApi = {
   login: async (credentials: LoginRequest): Promise<LoginResponse> => {
-    const response = await axiosInstance.post<LoginResponse>('/auth/login', credentials);
+    const response = await api.post<LoginResponse>('/auth/login', credentials);
     return response.data;
   },
   
   logout: async (): Promise<void> => {
-    await axiosInstance.post('/auth/logout');
+    await api.post('/auth/logout');
   },
   
   check: async (): Promise<boolean> => {
     try {
-      await axiosInstance.get('/auth/check');
+      await api.get('/auth/check');
       return true;
     } catch {
       return false;

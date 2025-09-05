@@ -22,7 +22,11 @@ public class IpWhitelistFilter extends OncePerRequestFilter {
         "125.131.198.22", 
         "175.209.18.40",
         "127.0.0.1",      // localhost
-        "0:0:0:0:0:0:0:1" // IPv6 localhost
+        "0:0:0:0:0:0:0:1", // IPv6 localhost
+        "172.17.0.1",     // Docker bridge gateway
+        "172.30.0.0/16",  // Docker network range
+        "172.17.0.0/16",  // Docker default bridge
+        "::ffff:127.0.0.1" // IPv4-mapped IPv6
     );
     
     @Override
@@ -74,6 +78,22 @@ public class IpWhitelistFilter extends OncePerRequestFilter {
      * IP가 허용 목록에 있는지 확인
      */
     private boolean isAllowedIp(String ip) {
-        return ALLOWED_IPS.contains(ip);
+        // 정확한 매치 확인
+        if (ALLOWED_IPS.contains(ip)) {
+            return true;
+        }
+        
+        // Docker 네트워크 대역 확인 (172.x.x.x)
+        if (ip.startsWith("172.17.") || ip.startsWith("172.30.") || ip.startsWith("172.18.")) {
+            return true;
+        }
+        
+        // IPv6-mapped IPv4 주소 처리
+        if (ip.startsWith("::ffff:")) {
+            String ipv4 = ip.substring(7);
+            return isAllowedIp(ipv4);
+        }
+        
+        return false;
     }
 }

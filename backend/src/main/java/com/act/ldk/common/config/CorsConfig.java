@@ -17,7 +17,17 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         
         // 허용할 오리진 설정 (프론트엔드 주소)
-        configuration.setAllowedOrigins(List.of("http://localhost:4000"));
+        configuration.setAllowedOrigins(Arrays.asList(
+            "http://localhost:4000",
+            "http://localhost:4001", 
+            "http://localhost:3001",
+            "http://125.131.198.22:3001",
+            "http://125.131.198.22",
+            "http://linksuqare.shop",
+            "https://linksuqare.shop",
+            "http://www.linksuqare.shop",
+            "https://www.linksuqare.shop"
+        ));
         
         // 허용할 HTTP 메서드 설정
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
