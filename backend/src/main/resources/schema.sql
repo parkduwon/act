@@ -30,7 +30,6 @@ CREATE TABLE trade_settings (
     follow_coin_enabled BOOLEAN NOT NULL,
     follow_coin VARCHAR(50),
     follow_coin_rate DECIMAL(20, 8),
-    follow_coin_rate_price DECIMAL(20, 8),
     follow_coin_rate_formula VARCHAR(255),
     bid_trade_switch BOOLEAN NOT NULL DEFAULT TRUE,
     bid_trade_schedule_rate INT NOT NULL DEFAULT 5,

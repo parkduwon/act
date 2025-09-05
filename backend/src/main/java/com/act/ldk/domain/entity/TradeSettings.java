@@ -51,9 +51,6 @@ public class TradeSettings extends BaseTimeEntity {
     @Column(precision = 20, scale = 8)
     private BigDecimal followCoinRate;  // 추종 비율 (자동 계산됨)
     
-    @Column(precision = 20, scale = 8)
-    private BigDecimal followCoinRatePrice;  // 추종 가격
-    
     private String followCoinRateFormula;  // 추종 가격 공식
     
     @Column(nullable = false)

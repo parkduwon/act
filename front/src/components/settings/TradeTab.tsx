@@ -132,13 +132,22 @@ export default function TradeTab({ tradeSettings, setTradeSettings, saveTradeSet
                                             <p className="text-xs text-gray-500 mt-1">LDK/{tradeSettings?.followCoin} 비율 (첫 실행시 자동 계산)</p>
                                         </div>
                                         <div>
-                                            <Label>추종가격</Label>
+                                            <Label>{tradeSettings?.followCoin} 현재 가격</Label>
                                             <Input
-                                                value={tradeSettings?.followCoinRatePrice?.toFixed(8) || "-"}
+                                                value={tradeSettings?.followCoinCurrentPrice?.toFixed(4) || "-"}
                                                 disabled
                                                 className="bg-gray-100"
                                             />
-                                            <p className="text-xs text-gray-500 mt-1">비율 설정 시점의 LDK 가격</p>
+                                            <p className="text-xs text-gray-500 mt-1">추종 코인의 현재 가격</p>
+                                        </div>
+                                        <div>
+                                            <Label>추종 목표 가격</Label>
+                                            <Input
+                                                value={tradeSettings?.followTargetPrice?.toFixed(8) || "-"}
+                                                disabled
+                                                className="bg-gray-100"
+                                            />
+                                            <p className="text-xs text-gray-500 mt-1">비율에 따른 LDK 목표 가격</p>
                                         </div>
                                         <div>
                                             <Label>추종가격공식</Label>

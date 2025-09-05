@@ -217,7 +217,6 @@ public class TradeExecutionService {
             // 추종 비율이 없으면 현재 비율을 초기 비율로 저장
             if (settings.getFollowCoinRate() == null) {
                 settings.setFollowCoinRate(currentRatio);
-                settings.setFollowCoinRatePrice(context.getCurrentPrice());
                 settings.setFollowCoinRateFormula(String.format("LDK/%s = %.8f (초기 비율)", 
                     settings.getFollowCoin().toUpperCase(), currentRatio));
                 tradeSettingsRepository.save(settings);
@@ -226,9 +225,13 @@ public class TradeExecutionService {
             
             BigDecimal targetRatio = settings.getFollowCoinRate();
             
-            log.info("추종 모드: {}={}, LDK={}, 현재비율={}, 목표비율={}", 
+            // 목표 비율에 따른 LDK 목표 가격 계산
+            // 목표 LDK 가격 = 추종 코인 가격 * 목표 비율
+            BigDecimal targetLdkPrice = followPrice.multiply(targetRatio);
+            
+            log.info("추종 모드: {}={}, LDK현재가={}, LDK목표가={}, 현재비율={}, 목표비율={}", 
                 settings.getFollowCoin(), followPrice, context.getCurrentPrice(), 
-                currentRatio, targetRatio);
+                targetLdkPrice, currentRatio, targetRatio);
             
             // 비율 기준으로 거래 결정
             // 현재 비율이 목표 비율보다 높으면 매도 (LDK가 상대적으로 비쌈)

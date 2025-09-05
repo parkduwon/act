@@ -13,8 +13,9 @@ export interface TradeSettings {
   followCoinEnabled: boolean;
   followCoin?: string;
   followCoinRate?: number;  // 추종비율 (자동계산)
-  followCoinRatePrice?: number;  // 추종가격
   followCoinRateFormula?: string;  // 추종가격공식
+  followTargetPrice?: number;  // 추종 모드 실시간 목표 가격
+  followCoinCurrentPrice?: number;  // 추종 코인 현재 가격
   bidTradeSwitch?: boolean;  // 매도 거래 스위치
   bidTradeScheduleRate?: number;  // 거래 체결 간격(초)
   bidTradeDollar?: number;  // 거래 주문량

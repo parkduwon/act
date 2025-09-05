@@ -6,6 +6,8 @@ import com.act.ldk.domain.entity.TradeSettings;
 import com.act.ldk.domain.repository.ForceTradeSettingsRepository;
 import com.act.ldk.domain.repository.OrderBookSettingsRepository;
 import com.act.ldk.domain.repository.TradeSettingsRepository;
+import com.act.ldk.dto.TradeSettingsDto;
+import com.act.ldk.external.lbank.service.LBankApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class TradingBotService {
     private final TradeSettingsRepository tradeSettingsRepository;
     private final OrderBookSettingsRepository orderBookSettingsRepository;
     private final ForceTradeSettingsRepository forceTradeSettingsRepository;
+    private final LBankApiService lbankApiService;
     
     /**
      * 거래 설정 조회
@@ -32,6 +35,37 @@ public class TradingBotService {
     public TradeSettings getTradeSettings(String symbol) {
         return tradeSettingsRepository.findBySymbol(symbol)
             .orElseGet(() -> createDefaultTradeSettings(symbol));
+    }
+    
+    /**
+     * 거래 설정 조회 (DTO)
+     */
+    public TradeSettingsDto getTradeSettingsDto(String symbol) {
+        TradeSettings settings = getTradeSettings(symbol);
+        BigDecimal calculatedTargetPrice = null;
+        BigDecimal followCoinPrice = null;
+        
+        // 팔로우 코인이 활성화되어 있고 비율이 설정되어 있으면 목표 가격 계산
+        if (settings.getFollowCoinEnabled() && settings.getFollowCoin() != null && settings.getFollowCoinRate() != null) {
+            try {
+                String followSymbol = settings.getFollowCoin().toLowerCase() + "_usdt";
+                followCoinPrice = lbankApiService.getFollowCoinPrice(followSymbol);
+                
+                if (followCoinPrice != null) {
+                    // 목표 LDK 가격 = 추종 코인 가격 * 목표 비율
+                    calculatedTargetPrice = followCoinPrice.multiply(settings.getFollowCoinRate());
+                    log.debug("추종 모드 목표가격 계산: {}={}, 비율={}, LDK목표가={}", 
+                        settings.getFollowCoin(), followCoinPrice, settings.getFollowCoinRate(), calculatedTargetPrice);
+                }
+            } catch (Exception e) {
+                log.error("추종 코인 가격 조회 실패", e);
+            }
+        } else {
+            // 추종 모드가 아닐 때는 기본 목표가격 사용
+            calculatedTargetPrice = settings.getTargetPrice();
+        }
+        
+        return TradeSettingsDto.from(settings, calculatedTargetPrice, followCoinPrice);
     }
     
     /**
@@ -47,9 +81,25 @@ public class TradingBotService {
         existing.setMinUsdtQuantity(settings.getMinUsdtQuantity());
         existing.setBoundDollar(settings.getBoundDollar());
         existing.setRandomTryPercent(settings.getRandomTryPercent());
+        
+        // 팔로우 코인 변경 체크
+        boolean followCoinChanged = existing.getFollowCoin() != null && 
+            settings.getFollowCoin() != null && 
+            !existing.getFollowCoin().equals(settings.getFollowCoin());
+        
         existing.setFollowCoinEnabled(settings.getFollowCoinEnabled());
         existing.setFollowCoin(settings.getFollowCoin());
-        // followCoinRate는 자동 계산되므로 여기서 설정하지 않음
+        
+        // 팔로우 코인이 비활성화되거나 변경되면 비율 관련 데이터 초기화
+        if (!settings.getFollowCoinEnabled()) {
+            existing.setFollowCoinRate(null);
+            existing.setFollowCoinRateFormula(null);
+            log.info("팔로우 코인 비활성화, 비율 데이터 초기화");
+        } else if (followCoinChanged) {
+            existing.setFollowCoinRate(null);
+            existing.setFollowCoinRateFormula(null);
+            log.info("팔로우 코인 변경 ({}), 비율 데이터 초기화", settings.getFollowCoin());
+        }
         
         // 매도 거래 설정 업데이트
         existing.setBidTradeSwitch(settings.getBidTradeSwitch());

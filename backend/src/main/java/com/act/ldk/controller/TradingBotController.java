@@ -3,6 +3,7 @@ package com.act.ldk.controller;
 import com.act.ldk.domain.entity.ForceTradeSettings;
 import com.act.ldk.domain.entity.OrderBookSettings;
 import com.act.ldk.domain.entity.TradeSettings;
+import com.act.ldk.dto.TradeSettingsDto;
 import com.act.ldk.service.TradingBotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class TradingBotController {
     public ResponseEntity<Map<String, Object>> getBotStatus(@RequestParam String symbol) {
         Map<String, Object> status = new HashMap<>();
         status.put("symbol", symbol);
-        status.put("tradeSettings", tradingBotService.getTradeSettings(symbol));
+        status.put("tradeSettings", tradingBotService.getTradeSettingsDto(symbol));
         status.put("orderBookSettings", tradingBotService.getOrderBookSettings(symbol));
         status.put("forceTradeSettings", tradingBotService.getForceTradeSettings(symbol));
         status.put("enabled", tradingBotService.isBotEnabled(symbol));
@@ -42,8 +43,8 @@ public class TradingBotController {
      * 거래 설정 조회
      */
     @GetMapping("/trade-settings")
-    public ResponseEntity<TradeSettings> getTradeSettings(@RequestParam String symbol) {
-        return ResponseEntity.ok(tradingBotService.getTradeSettings(symbol));
+    public ResponseEntity<TradeSettingsDto> getTradeSettings(@RequestParam String symbol) {
+        return ResponseEntity.ok(tradingBotService.getTradeSettingsDto(symbol));
     }
     
     /**
