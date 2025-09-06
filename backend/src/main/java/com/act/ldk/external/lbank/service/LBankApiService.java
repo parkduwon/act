@@ -160,22 +160,22 @@ public class LBankApiService {
     
     public PlaceOrderResponse createOrder(String symbol, String type, String price, String quantity) {
         try {
-            ResCreateOrderVo order = placeOrder(symbol, type, price, quantity);
+//            ResCreateOrderVo order = placeOrder(symbol, type, price, quantity);
             PlaceOrderResponse response = new PlaceOrderResponse();
             PlaceOrderResponse.OrderData data = new PlaceOrderResponse.OrderData();
             
-            // 실제 주문 결과 사용
-            if (order != null && order.getResult() && order.getData() != null) {
-                String orderId = order.getData().get("order_id");
-                data.setOrderId(orderId);
-                response.setData(data);
-                response.setResult("true");
-                log.info("주문 성공: orderId={}", orderId);
-            } else {
-                response.setResult("false");
-                response.setErrorCode(order != null ? Integer.parseInt(order.getError_code()) : -1);
-                log.error("주문 실패: {}", order);
-            }
+//            // 실제 주문 결과 사용
+//            if (order != null && order.getResult() && order.getData() != null) {
+//                String orderId = order.getData().get("order_id");
+//                data.setOrderId(orderId);
+//                response.setData(data);
+//                response.setResult("true");
+//                log.info("주문 성공: orderId={}", orderId);
+//            } else {
+//                response.setResult("false");
+//                response.setErrorCode(order != null ? Integer.parseInt(order.getError_code()) : -1);
+//                log.error("주문 실패: {}", order);
+//            }
             
             return response;
         } catch (Exception e) {
@@ -186,7 +186,7 @@ public class LBankApiService {
             return response;
         }
     }
-    
+
     /**
      * 모든 미체결 주문 조회
      */

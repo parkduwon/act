@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Save } from "lucide-react";
 import { followCoinOptions } from "@/components/FollowCoinOptions";
-import { formatCurrency, parseCurrency } from "@/utils/currency";
+import { CurrencyInput } from "@/components/ui/currency-input";
 import type { TradeSettings } from "@/api/bot";
 import TradingInfoCard from "./TradingInfoCard";
 import React from "react";
@@ -167,22 +167,20 @@ export default function TradeTab({ tradeSettings, setTradeSettings, saveTradeSet
                     <div className="grid grid-cols-2 gap-2">
                         <div>
                             <Label htmlFor="targetPrice">목표가격</Label>
-                            <Input
+                            <CurrencyInput
                                 id="targetPrice"
-                                type="text"
-                                className="text-right"
-                                value={formatCurrency(tradeSettings?.targetPrice, "LDK")}
-                                onChange={(e) => setTradeSettings(prev => prev ? {...prev, targetPrice: parseCurrency(e.target.value)} : null)}
+                                value={tradeSettings?.targetPrice}
+                                onChange={(value) => setTradeSettings(prev => prev ? {...prev, targetPrice: value} : null)}
+                                currency="LDK"
                             />
                         </div>
                         <div>
                             <Label htmlFor="minUsdtQuantity">최저 USDT 개수</Label>
-                            <Input
+                            <CurrencyInput
                                 id="minUsdtQuantity"
-                                type="text"
-                                className="text-right"
-                                value={formatCurrency(tradeSettings?.minUsdtQuantity, "USDT")}
-                                onChange={(e) => setTradeSettings(prev => prev ? {...prev, minUsdtQuantity: parseCurrency(e.target.value)} : null)}
+                                value={tradeSettings?.minUsdtQuantity}
+                                onChange={(value) => setTradeSettings(prev => prev ? {...prev, minUsdtQuantity: value} : null)}
+                                currency="USDT"
                             />
                             <p className="text-xs text-gray-500 mt-1">이 수량 이하시 LDK 강제 매도</p>
                         </div>
@@ -191,22 +189,20 @@ export default function TradeTab({ tradeSettings, setTradeSettings, saveTradeSet
                     <div className="grid grid-cols-2 gap-2">
                         <div>
                             <Label htmlFor="maxTradePrice">최대 거래가격</Label>
-                            <Input
+                            <CurrencyInput
                                 id="maxTradePrice"
-                                type="text"
-                                className="text-right"
-                                value={formatCurrency(tradeSettings?.maxTradePrice, "LDK")}
-                                onChange={(e) => setTradeSettings(prev => prev ? {...prev, maxTradePrice: parseCurrency(e.target.value)} : null)}
+                                value={tradeSettings?.maxTradePrice}
+                                onChange={(value) => setTradeSettings(prev => prev ? {...prev, maxTradePrice: value} : null)}
+                                currency="LDK"
                             />
                         </div>
                         <div>
                             <Label htmlFor="minTradePrice">최소 거래가격</Label>
-                            <Input
+                            <CurrencyInput
                                 id="minTradePrice"
-                                type="text"
-                                className="text-right"
-                                value={formatCurrency(tradeSettings?.minTradePrice, "LDK")}
-                                onChange={(e) => setTradeSettings(prev => prev ? {...prev, minTradePrice: parseCurrency(e.target.value)} : null)}
+                                value={tradeSettings?.minTradePrice}
+                                onChange={(value) => setTradeSettings(prev => prev ? {...prev, minTradePrice: value} : null)}
+                                currency="LDK"
                             />
                         </div>
                     </div>
@@ -214,12 +210,11 @@ export default function TradeTab({ tradeSettings, setTradeSettings, saveTradeSet
                     <div className="grid grid-cols-2 gap-2">
                         <div>
                             <Label htmlFor="boundDollar">주문수량 랜덤수량 가격</Label>
-                            <Input
+                            <CurrencyInput
                                 id="boundDollar"
-                                type="text"
-                                className="text-right"
-                                value={formatCurrency(tradeSettings?.boundDollar, "USDT")}
-                                onChange={(e) => setTradeSettings(prev => prev ? {...prev, boundDollar: parseCurrency(e.target.value)} : null)}
+                                value={tradeSettings?.boundDollar}
+                                onChange={(value) => setTradeSettings(prev => prev ? {...prev, boundDollar: value} : null)}
+                                currency="USDT"
                             />
                             <p className="text-xs text-gray-500 mt-1">주문량=최소수량+랜덤수량</p>
                         </div>

@@ -29,97 +29,97 @@ public class TradingBotScheduler {
      * 거래 실행 스케줄러
      * 초기 지연: 3초, 실행 간격: 5초
      */
-    @Scheduled(initialDelay = 3000, fixedRate = 5000)
-    public void executeTrade() {
-        List<TradeSettings> activeSettings = tradeSettingsRepository.findByEnabled(true);
-        
-        if (activeSettings.isEmpty()) {
-            log.debug("활성화된 거래 설정이 없습니다.");
-            return;
-        }
-        
-        for (TradeSettings settings : activeSettings) {
-            try {
-                // 랜덤 지연 (0~3500ms) - 봇 탐지 회피
-                int randomDelay = random.nextInt(3500);
-                Thread.sleep(randomDelay);
-                
-                log.debug("거래 실행 시작: {}", settings.getSymbol());
-                tradeExecutionService.executeTrade(settings.getSymbol());
-                
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                log.error("거래 스케줄러 인터럽트 발생", e);
-                break;
-            } catch (Exception e) {
-                log.error("거래 실행 중 오류 발생: {}", settings.getSymbol(), e);
-            }
-        }
-    }
+//    @Scheduled(initialDelay = 3000, fixedRate = 5000)
+//    public void executeTrade() {
+//        List<TradeSettings> activeSettings = tradeSettingsRepository.findByEnabled(true);
+//
+//        if (activeSettings.isEmpty()) {
+//            log.debug("활성화된 거래 설정이 없습니다.");
+//            return;
+//        }
+//
+//        for (TradeSettings settings : activeSettings) {
+//            try {
+//                // 랜덤 지연 (0~3500ms) - 봇 탐지 회피
+//                int randomDelay = random.nextInt(3500);
+//                Thread.sleep(randomDelay);
+//
+//                log.debug("거래 실행 시작: {}", settings.getSymbol());
+//                tradeExecutionService.executeTrade(settings.getSymbol());
+//
+//            } catch (InterruptedException e) {
+//                Thread.currentThread().interrupt();
+//                log.error("거래 스케줄러 인터럽트 발생", e);
+//                break;
+//            } catch (Exception e) {
+//                log.error("거래 실행 중 오류 발생: {}", settings.getSymbol(), e);
+//            }
+//        }
+//    }
     
     /**
      * 호가창 관리 스케줄러
      * 초기 지연: 1초, 실행 간격: 60초
      */
-    @Scheduled(initialDelay = 1000, fixedRate = 60000)
-    public void manageOrderBook() {
-        List<TradeSettings> activeSettings = tradeSettingsRepository.findByEnabled(true);
-        
-        if (activeSettings.isEmpty()) {
-            log.debug("활성화된 거래 설정이 없습니다.");
-            return;
-        }
-        
-        for (TradeSettings settings : activeSettings) {
-            try {
-                // 랜덤 지연 (0~2500ms) - 봇 탐지 회피
-                int randomDelay = random.nextInt(2500);
-                Thread.sleep(randomDelay);
-                
-                log.debug("호가창 관리 시작: {}", settings.getSymbol());
-                orderBookManagementService.manageOrderBook(settings.getSymbol());
-                
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                log.error("호가창 관리 스케줄러 인터럽트 발생", e);
-                break;
-            } catch (Exception e) {
-                log.error("호가창 관리 중 오류 발생: {}", settings.getSymbol(), e);
-            }
-        }
-    }
+//    @Scheduled(initialDelay = 1000, fixedRate = 60000)
+//    public void manageOrderBook() {
+//        List<TradeSettings> activeSettings = tradeSettingsRepository.findByEnabled(true);
+//
+//        if (activeSettings.isEmpty()) {
+//            log.debug("활성화된 거래 설정이 없습니다.");
+//            return;
+//        }
+//
+//        for (TradeSettings settings : activeSettings) {
+//            try {
+//                // 랜덤 지연 (0~2500ms) - 봇 탐지 회피
+//                int randomDelay = random.nextInt(2500);
+//                Thread.sleep(randomDelay);
+//
+//                log.debug("호가창 관리 시작: {}", settings.getSymbol());
+//                orderBookManagementService.manageOrderBook(settings.getSymbol());
+//
+//            } catch (InterruptedException e) {
+//                Thread.currentThread().interrupt();
+//                log.error("호가창 관리 스케줄러 인터럽트 발생", e);
+//                break;
+//            } catch (Exception e) {
+//                log.error("호가창 관리 중 오류 발생: {}", settings.getSymbol(), e);
+//            }
+//        }
+//    }
     
     /**
      * 호가 취소 스케줄러
      * 초기 지연: 1초, 실행 간격: 10초
      */
-    @Scheduled(initialDelay = 1000, fixedRate = 10000)
-    public void cancelOldOrders() {
-        List<TradeSettings> activeSettings = tradeSettingsRepository.findByEnabled(true);
-        
-        if (activeSettings.isEmpty()) {
-            log.debug("활성화된 거래 설정이 없습니다.");
-            return;
-        }
-        
-        for (TradeSettings settings : activeSettings) {
-            try {
-                // 랜덤 지연 (0~2500ms) - 봇 탐지 회피
-                int randomDelay = random.nextInt(2500);
-                Thread.sleep(randomDelay);
-                
-                log.debug("오래된 주문 취소 시작: {}", settings.getSymbol());
-                orderCancellationService.cancelOldOrders(settings.getSymbol());
-                
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                log.error("주문 취소 스케줄러 인터럽트 발생", e);
-                break;
-            } catch (Exception e) {
-                log.error("주문 취소 중 오류 발생: {}", settings.getSymbol(), e);
-            }
-        }
-    }
+//    @Scheduled(initialDelay = 1000, fixedRate = 10000)
+//    public void cancelOldOrders() {
+//        List<TradeSettings> activeSettings = tradeSettingsRepository.findByEnabled(true);
+//
+//        if (activeSettings.isEmpty()) {
+//            log.debug("활성화된 거래 설정이 없습니다.");
+//            return;
+//        }
+//
+//        for (TradeSettings settings : activeSettings) {
+//            try {
+//                // 랜덤 지연 (0~2500ms) - 봇 탐지 회피
+//                int randomDelay = random.nextInt(2500);
+//                Thread.sleep(randomDelay);
+//
+//                log.debug("오래된 주문 취소 시작: {}", settings.getSymbol());
+//                orderCancellationService.cancelOldOrders(settings.getSymbol());
+//
+//            } catch (InterruptedException e) {
+//                Thread.currentThread().interrupt();
+//                log.error("주문 취소 스케줄러 인터럽트 발생", e);
+//                break;
+//            } catch (Exception e) {
+//                log.error("주문 취소 중 오류 발생: {}", settings.getSymbol(), e);
+//            }
+//        }
+//    }
     
     /**
      * 봇 상태 로깅 (선택적)

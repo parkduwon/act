@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const baseURL = window.location.hostname === 'linksuqare.shop' || window.location.hostname === 'www.linksuqare.shop'
+const baseURL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:8080/api'  // 로컬 개발
+  : window.location.hostname === 'linksuqare.shop' || window.location.hostname === 'www.linksuqare.shop'
   ? '/api'  // 도메인 사용시 프록시 경유
   : 'http://125.131.198.22:8090/api'; // IP 직접 접근시
 

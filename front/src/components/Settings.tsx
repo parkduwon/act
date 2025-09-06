@@ -70,7 +70,17 @@ export default function Settings() {
         if (!tradeSettings) return;
         try {
             setSaving(true);
-            await botApi.updateTradeSettings(tradeSettings);
+            // 소수점 5자리로 절사
+            const roundedSettings = {
+                ...tradeSettings,
+                targetPrice: Math.floor(tradeSettings.targetPrice * 100000) / 100000,
+                maxTradePrice: Math.floor(tradeSettings.maxTradePrice * 100000) / 100000,
+                minTradePrice: Math.floor(tradeSettings.minTradePrice * 100000) / 100000,
+                minUsdtQuantity: Math.floor(tradeSettings.minUsdtQuantity * 100000) / 100000,
+                boundDollar: Math.floor(tradeSettings.boundDollar * 100000) / 100000,
+                bidTradeDollar: tradeSettings.bidTradeDollar ? Math.floor(tradeSettings.bidTradeDollar * 100000) / 100000 : tradeSettings.bidTradeDollar
+            };
+            await botApi.updateTradeSettings(roundedSettings);
             toast.success("거래 설정이 저장되었습니다.");
         } catch (error) {
             console.error("Failed to save trade settings:", error);
@@ -84,7 +94,15 @@ export default function Settings() {
         if (!orderBookSettings) return;
         try {
             setSaving(true);
-            await botApi.updateOrderBookSettings(orderBookSettings);
+            // 소수점 5자리로 절사
+            const roundedSettings = {
+                ...orderBookSettings,
+                askOrderBookStartPrice: Math.floor(orderBookSettings.askOrderBookStartPrice * 100000) / 100000,
+                askOrderBookEndPrice: Math.floor(orderBookSettings.askOrderBookEndPrice * 100000) / 100000,
+                bidOrderBookStartPrice: Math.floor(orderBookSettings.bidOrderBookStartPrice * 100000) / 100000,
+                bidOrderBookEndPrice: Math.floor(orderBookSettings.bidOrderBookEndPrice * 100000) / 100000
+            };
+            await botApi.updateOrderBookSettings(roundedSettings);
             toast.success("호가창 설정이 저장되었습니다.");
         } catch (error) {
             console.error("Failed to save orderbook settings:", error);
