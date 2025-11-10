@@ -30,7 +30,7 @@ public record AuthenticationInterceptor(String apiKey, String secret, String met
                 addHeader("echostr", uuid).
                 addHeader("signature_method", method);
 
-        System.out.println(times);
+        // System.out.println(times); // 디버깅용 출력 제거
         //参数拦截器只在非get请求中添加
         String oriMethod = original.method();
         if (StringUtils.equals("GET", oriMethod)) {

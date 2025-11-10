@@ -42,7 +42,7 @@ public class TradeExecutionService {
                 .filter(TradeSettings::getEnabled)
                 .orElse(null);
             if (tradeSettings == null) {
-                log.debug("거래 설정이 없거나 비활성화됨: {}", symbol);
+                log.info("거래 설정이 없거나 비활성화됨: {}", symbol);
                 return;
             }
             
@@ -56,7 +56,7 @@ public class TradeExecutionService {
             
             // 3. 랜덤 확률 체크
             if (!shouldExecuteTrade(tradeSettings.getRandomTryPercent())) {
-                log.debug("랜덤 확률로 거래 스킵: {}", symbol);
+                log.info("랜덤 확률로 거래 스킵: {}", symbol);
                 return;
             }
             
@@ -194,7 +194,7 @@ public class TradeExecutionService {
     private void handleFollowTrade(TradeContext context, TradeSettings settings) {
         // 추종 코인이 선택되지 않으면 목표가 모드로 처리
         if (settings.getFollowCoin() == null || settings.getFollowCoin().isEmpty()) {
-            log.debug("추종 코인 미선택. 목표가 모드로 동작");
+            log.info("추종 코인 미선택. 목표가 모드로 동작");
             handleTargetPriceTrade(context, settings);
             return;
         }
@@ -320,9 +320,10 @@ public class TradeExecutionService {
         if (context.getOrderSide() == ForceTradeSettings.OrderSide.BUY) {
             // 매수: 목표가가 현재가보다 높음 (가격 상승 기대)
             BigDecimal bestAskPrice = orderBook.getBestAskPrice();
-            
-            if (bestAskPrice != null && bestAskPrice.compareTo(BigDecimal.ZERO) > 0) {
-                // 매도 호가가 있으면 체결
+
+            if (bestAskPrice != null && bestAskPrice.compareTo(BigDecimal.ZERO) > 0
+                && bestAskPrice.compareTo(targetPrice) <= 0) {
+                // 매도 호가가 있고 목표가 이하이면 체결
                 price = bestAskPrice;
                 log.info("매수 - 매도 호가 먹기: 가격={}", price);
             } else {
