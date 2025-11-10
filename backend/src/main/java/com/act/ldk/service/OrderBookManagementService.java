@@ -248,9 +248,9 @@ public class OrderBookManagementService {
             
             for (int i = 0; i < ordersToPlace; i++) {
                 BigDecimal orderPrice = generateAskPrice(context);
-                
+
                 // 중복 가격 체크 (기존 주문과 중복되지 않는 경우만)
-                if (!askPrices.contains(orderPrice)) {
+                if (askPrices.stream().noneMatch(price -> price.compareTo(orderPrice) == 0)) {
                     BigDecimal quantity = generateRandomQuantity(orderPrice, context.getBoundDollar());
                     
                     log.info("매도 호가 추가: 가격={}, 수량={}", orderPrice, quantity);
@@ -314,10 +314,11 @@ public class OrderBookManagementService {
             
             for (int i = 0; i < ordersToPlace; i++) {
                 BigDecimal orderPrice = generateBidPrice(context);
-                
+
                 // 중복 가격 체크 및 양수 확인 (기존 주문과 중복되지 않는 경우만)
-                if (!bidPrices.contains(orderPrice) && orderPrice.compareTo(BigDecimal.ZERO) > 0) {
-                    
+                if (bidPrices.stream().noneMatch(price -> price.compareTo(orderPrice) == 0)
+                    && orderPrice.compareTo(BigDecimal.ZERO) > 0) {
+
                     BigDecimal quantity = generateRandomQuantity(orderPrice, context.getBoundDollar());
                     
                     log.info("매수 호가 추가: 가격={}, 수량={}", orderPrice, quantity);
